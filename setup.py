@@ -9,6 +9,6 @@ setup(
         author="ngn13",
         description=DESCRIPTION,
         packages=find_packages(),
-        install_requires=["nextcord", "zipfile", "colorama"], 
+        install_requires=["nextcord", "colorama"], 
         entry_points={"console_scripts": ["basecord=basecord.build:main"]}
 )
