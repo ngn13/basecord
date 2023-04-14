@@ -1,5 +1,6 @@
 import sys
 import os
+import shutil
 import requests
 import getpass
 from zipfile import ZipFile
@@ -36,9 +37,12 @@ def download():
         f.write(req.content)
     pr("Done!")
     
-def extract():
+def extract(name):
     with ZipFile(ZIP, "r") as z:
         z.extractall(".")
+    
+    shutil.move("basecord-template-main", name)
+    os.chdir(name)
     
     f = open("README.md", "r")
     readme = f.read()
@@ -59,6 +63,10 @@ def extract():
     f.write(license)
     f.close()
 
+    f = open("config.json", "w")
+    f.write(json.dumps(CONFIG))
+    f.close()
+
 def main():
     try:
         NAME = sys.argv[1]
@@ -67,15 +75,12 @@ def main():
 
     if os.path.isdir(NAME) or os.path.exists(NAME):
         err(f"Directory '{NAME}' already exists")
-    
-    os.mkdir(NAME)
-    os.chdir(NAME)
 
     pr("Welcome to Basecord project creator tool")
     pr("Let me help you create your project!")
     ask()
     download()
-    extract()
+    extract(NAME)
     pr("You are ready to go!")
     pr("Start your bot with "+Fore.CYAN+"python bot.py")
     
