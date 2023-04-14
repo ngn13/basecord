@@ -11,7 +11,7 @@ ZIP = "tmp.zip"
 CONFIG = {}
 AUTHOR = "Anon"
 
-def err():
+def err(txt):
     print(Fore.RED+Style.BRIGHT+"! "+txt)
     exit()
 
