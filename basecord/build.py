@@ -59,7 +59,7 @@ class Builder:
         self.pr("Done!")
     
     def extract(self):
-        with ZipFile(ZIP, "r") as z:
+        with ZipFile(self.ZIP, "r") as z:
             z.extractall(".")
 
         shutil.move("basecord-template-main", self.NAME)
