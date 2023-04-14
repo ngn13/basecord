@@ -8,85 +8,89 @@ from zipfile import ZipFile
 from colorama import init, Fore, Style
 init(autoreset=True)
 
-URL = "https://github.com/ngn13/basecord-template/archive/refs/heads/main.zip"
-ZIP = "tmp.zip"
-CONFIG = {}
-AUTHOR = "Anon"
+class Builder:
+    def __init__(self):
+        self.URL = "https://github.com/ngn13/basecord-template/archive/refs/heads/main.zip"
+        self.ZIP = "tmp.zip"
+        self.CONFIG = {}
+        self.AUTHOR = "Anon"
 
-def err(txt):
-    print(Fore.RED+Style.BRIGHT+"! "+Fore.RESET+txt)
-    exit()
+        try:
+            self.NAME = sys.argv[1]
+        except:
+            self.err("Usage: basecord <project_name>")
 
-def pr(txt):
-    print(Fore.MAGENTA+Style.BRIGHT+"> "+Fore.RESET+txt)
+        if os.path.isdir(NAME) or os.path.exists(NAME):
+            self.err(f"Directory '{NAME}' already exists")
 
-def inp(txt):
-    return input(Fore.GREEN+Style.BRIGHT+"? "+Fore.RESET+txt+": ")
-
-def secret(txt):
-    return getpass.getpass(Fore.GREEN+Style.BRIGHT+"? "+Fore.RESET+txt+": ")
-
-def ask():
-    CONFIG["token"] = secret("Discord token")
-    CONFIG["guilds"] = inp("Guild IDs (split with comma)").replace(" ", "").split(",")
-    AUTHOR = inp("Author")    
-
-def download():
-    pr("Downloading the project template...")
-    req = requests.get(URL)
-    with open(ZIP, "wb") as f:
-        f.write(req.content)
-    pr("Done!")
+        self.pr("Welcome to Basecord project creator tool")
+        self.pr("Let me help you create your project!")
     
-def extract(name):
-    with ZipFile(ZIP, "r") as z:
-        z.extractall(".")
+        self.ask()
+        self.download()
+        self.extract(NAME)
     
-    shutil.move("basecord-template-main", name)
-    os.remove(ZIP)
-    os.chdir(name)
+        self.pr("You are ready to go!")
+        self.pr("Start your bot with "+Fore.CYAN+"python bot.py")
     
-    f = open("README.md", "r")
-    readme = f.read()
-    f.close()
+    def err(self, txt):
+        print(Fore.RED+Style.BRIGHT+"! "+Fore.RESET+txt)
+        exit()
+    
+    def pr(self, txt):
+        print(Fore.MAGENTA+Style.BRIGHT+"> "+Fore.RESET+txt)
+    
+    def inp(self, txt):
+        return input(Fore.GREEN+Style.BRIGHT+"? "+Fore.RESET+txt+": ")
+    
+    def secret(self, txt):
+        return getpass.getpass(Fore.GREEN+Style.BRIGHT+"? "+Fore.RESET+txt+": ")
+    
+    def ask(self):
+        self.CONFIG["token"] = self.secret("Discord token")
+        self.CONFIG["guilds"] = self.inp("Guild IDs (split with comma)").replace(" ", "").split(",")
+        self.AUTHOR = self.inp("Author")    
 
-    f = open("LICENSE.txt", "r")
-    license = f.read()
-    f.close()
+    def download(self):
+        self.pr("Downloading the project template...")
+        req = requests.get(self.URL)
+        with open(self.ZIP, "wb") as f:
+            f.write(req.content)
+        self.pr("Done!")
+    
+    def extract(self):
+        with ZipFile(ZIP, "r") as z:
+            z.extractall(".")
 
-    readme = readme.replace("~author~", AUTHOR)
-    license = license.replace("~author~", AUTHOR)
+        shutil.move("basecord-template-main", self.NAME)
+        os.remove(self.ZIP)
+        os.chdir(self.NAME)
 
-    f = open("README.md", "w")
-    f.write(readme)
-    f.close()
+        f = open("README.md", "r")
+        readme = f.read()
+        f.close()
 
-    f = open("LICENSE.txt", "w")
-    f.write(license)
-    f.close()
+        f = open("LICENSE.txt", "r")
+        license = f.read()
+        f.close()
 
-    f = open("config.json", "w")
-    f.write(json.dumps(CONFIG))
-    f.close()
+        readme = readme.replace("~author~", self.AUTHOR)
+        license = license.replace("~author~", self.AUTHOR)
+
+        f = open("README.md", "w")
+        f.write(readme)
+        f.close()
+
+        f = open("LICENSE.txt", "w")
+        f.write(license)
+        f.close()
+
+        f = open("config.json", "w")
+        f.write(json.dumps(self.CONFIG))
+        f.close()
 
 def main():
-    try:
-        NAME = sys.argv[1]
-    except:
-        err("Usage: basecord <project_name>")
-
-    if os.path.isdir(NAME) or os.path.exists(NAME):
-        err(f"Directory '{NAME}' already exists")
-
-    pr("Welcome to Basecord project creator tool")
-    pr("Let me help you create your project!")
-
-    ask()
-    download()
-    extract(NAME)
-    
-    pr("You are ready to go!")
-    pr("Start your bot with "+Fore.CYAN+"python bot.py")
+    Builder()
     
 if __name__ == "__main__":
     main()
