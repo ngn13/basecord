@@ -43,6 +43,7 @@ def extract(name):
         z.extractall(".")
     
     shutil.move("basecord-template-main", name)
+    os.remove(ZIP)
     os.chdir(name)
     
     f = open("README.md", "r")
@@ -79,9 +80,11 @@ def main():
 
     pr("Welcome to Basecord project creator tool")
     pr("Let me help you create your project!")
+
     ask()
     download()
     extract(NAME)
+    
     pr("You are ready to go!")
     pr("Start your bot with "+Fore.CYAN+"python bot.py")
     
