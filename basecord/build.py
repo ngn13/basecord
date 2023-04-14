@@ -12,11 +12,11 @@ CONFIG = {}
 AUTHOR = "Anon"
 
 def err(txt):
-    print(Fore.RED+Style.BRIGHT+"! "+txt)
+    print(Fore.RED+Style.BRIGHT+"! "+Fore.RESET+txt)
     exit()
 
 def pr(txt):
-    print(Fore.MAGENTA+Style.BRIGHT+"> "+txt)
+    print(Fore.MAGENTA+Style.BRIGHT+"> "+Fore.RESET+txt)
 
 def inp(txt):
     return input(Fore.GREEN+Style.BRIGHT+"? "+Fore.RESET+txt+": ")
