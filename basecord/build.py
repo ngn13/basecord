@@ -20,15 +20,15 @@ class Builder:
         except:
             self.err("Usage: basecord <project_name>")
 
-        if os.path.isdir(NAME) or os.path.exists(NAME):
-            self.err(f"Directory '{NAME}' already exists")
+        if os.path.isdir(self.NAME) or os.path.exists(self.NAME):
+            self.err(f"Directory '{self.NAME}' already exists")
 
         self.pr("Welcome to Basecord project creator tool")
         self.pr("Let me help you create your project!")
     
         self.ask()
         self.download()
-        self.extract(NAME)
+        self.extract()
     
         self.pr("You are ready to go!")
         self.pr("Start your bot with "+Fore.CYAN+"python bot.py")
